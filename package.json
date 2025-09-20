@@ -1,6 +1,6 @@
 {
   "name": "@uf-prince/files",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Files repo with plugins, lib, and data",
   "main": "index.js",
   "keywords": [],
@@ -11,25 +11,4 @@
   "publishConfig": {
     "access": "public"
   }
-}{
-  "name": "@uf-prince/files",
-  "version": "1.0.4",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  }
 }
-0
-
