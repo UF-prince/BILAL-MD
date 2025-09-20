@@ -1,19 +1,5 @@
-
-
-
-cat > package.json <<'EOF'
 {
   "name": "@ufprince/files",
-  "version": "1.0.0",
-  "main": "index.js",
-  "private": false,
-  "publishConfig": {
-    "access": "restricted"
-  }
-}
-EOF
-{
-  "name": "files",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -34,7 +20,9 @@ EOF
   "bugs": {
     "url": "https://github.com/UF-prince/FILES/issues"
   },
-  "homepage": "https://github.com/UF-prince/FILES#readme"
+  "homepage": "https://github.com/UF-prince/FILES#readme",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  }
 }
-X
-
