@@ -1,28 +1,23 @@
 {
-  "name": "@ufprince/files",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/UF-prince/FILES.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/UF-prince/FILES/issues"
-  },
-  "homepage": "https://github.com/UF-prince/FILES#readme",
-  "private": false,
-  "publishConfig": {
-    "access": "public"
-  }
+"name": "@ufprince/files",
+"version": "1.0.1",
+"description": "",
+"main": "index.js",
+"directories": {
+"lib": "lib"
+},
+"scripts": {
+"test": "echo "Error: no test specified" && exit 1"
+},
+"keywords": [],
+"author": "",
+"license": "ISC",
+"type": "commonjs",
+"private": false,
+"publishConfig": {
+"access": "public"
 }
+}
+
+acha yeh code add kr do me ese package json code me ab link to gayab ho gya lekin wo auto use to ho rha hoga na kese
+
