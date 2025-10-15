@@ -4,14 +4,14 @@ const { sleep } = require('../lib/functions');
 
 cmd({
     pattern: "menu",
-    alias: ["m", "me", "men", "meno", "menu1", "menus", "list", "li", "lis", "lists", "allcmd", "allcmds", "totalcmds", "cmd", "cmds", "show", "showcmd"],
+    alias: ["m","me","men","meno","menu1","menus","list","li","lis","lists","allcmd","allcmds","totalcmds","cmd","cmds","show","showcmd"],
     desc: "Show interactive menu system line by line",
     category: "menu",
     react: "👑",
     filename: __filename
 }, async (conn, mek, m, { from, reply }) => {
     try {
-        // Platform & User
+        // Platform function
         function getPlatform() {
             if (process.env.HEROKU_APP_NAME) return "Heroku";
             if (process.env.KOYEB_API) return "Koyeb";
@@ -19,9 +19,10 @@ cmd({
             if (process.env.TERMUX) return "Termux";
             return "Panel";
         }
+
         const displayName = m.pushName || m.sender.split('@')[0] || 'User';
 
-        // Full menu text
+        // Menu text
         const menuText = `*╭━━━〔 👑 BiLAL-MD 👑 〕━━━┈⊷*
 *┃👑╭──────────────*
 *┃👑│ USER:❯ ${config.OWNER_NAME}*
@@ -64,6 +65,8 @@ cmd({
 *┃👑│ • REJECTALL*
 *┃👑│ • GDESC*
 *┃👑│ • GNAME*
+*┃👑│ • LEFT*
+*┃👑│ • JOIN*
 *╰━━━━━━━━━━━━━━━┈⊷*
 
 *╭━━〔 👑 USER 👑 〕━━┈⊷*
@@ -132,58 +135,45 @@ cmd({
 *┃👑│ • RESTART*
 *╰━━━━━━━━━━━━━━━┈⊷*
 
-*👑 FOR HELP CLICK HERE 👑*
+*👑 clICK HERE FOR HELP 👑*
+
+*👑 SUPPORT WEBSITE 👑*
 *https://akaserein.github.io/Bilal/*
+
+*👑 SUPPORT CHANNEL 👑* 
+*https://whatsapp.com/channel/0029Vaj3Xnu17EmtDxTNnQ0G*
+
+*👑 SUPPORT GROUP 👑*
+*https://chat.whatsapp.com/BwWffeDwiqe6cjDDklYJ5m?mode=ems_copy_t*
 
 *👑 BILAL-MD WHATSAPP BOT 👑*`;
 
-// Emojis array
-const emojis = ["🥰","🌹","♥️","💓","😍","💞","🌺","😘","❤️","💘","💞","💕","❣️","💗","💓","😇","☺️","😊","😃","🔰","👑","🙂","🥳"];
+        // 1️⃣ Send image with caption first
+        await conn.sendMessage(from, {
+            image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/kunzpz.png' },
+            caption: "*👑 BILAL-MD MENU 👑*"
+        }, { quoted: mek });
 
-// 1️⃣ Send image first
-await conn.sendMessage(from, {
-    image: { url: config.MENU_IMAGE_URL || 'https://files.catbox.moe/kunzpz.png' },
-    caption: "*👑 BILAL-MD MENU 👑*"
-}, { quoted: mek });
+        // 2️⃣ Wait 1 second
+        await sleep(1000);
 
-// 2️⃣ Send loading message
-const loadingMsg = await conn.sendMessage(from, {
-    text: "*MENU ME COMMANDS ADD HO RAHE HAI 🥺*\n*THORA SA INTAZAR KARE....🥰*"
-}, { quoted: mek });
+        // 3️⃣ Send menu line-by-line
+        const lines = menuText.split("\n");
+        let currentText = "";
+        const msg = await conn.sendMessage(from, { text: currentText }, { quoted: mek });
 
-// 3️⃣ Split menu by lines & send line-by-line
-const lines = menuText.split("\n");
-let currentText = "";
-const msg = await conn.sendMessage(from, { text: currentText }, { quoted: mek });
-
-for (const line of lines) {
-    currentText += line + "\n";
-    await sleep(1000); // 1 sec delay
-
-    const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-
-    // Edit menu message
-    await conn.relayMessage(from, {
-        protocolMessage: {
-            key: msg.key,
-            type: 14,
-            editedMessage: { conversation: currentText }
+        for (const line of lines) {
+            currentText += line + "\n";
+            await sleep(500); // 0.5 sec
+            // Edit menu message
+            await conn.relayMessage(from, {
+                protocolMessage: {
+                    key: msg.key,
+                    type: 14,
+                    editedMessage: { conversation: currentText }
+                }
+            }, {});
         }
-    }, {});
-
-    // React line-by-line with emoji
-    await conn.sendMessage(from, { react: { text: randomEmoji, key: msg.key } });
-}
-
-// 4️⃣ Menu complete → delete loading message
-await conn.sendMessage(from, { react: { text: "✅", key: msg.key } }); // final react
-await conn.sendMessage(from, { text: "Menu complete ✔️" }); // optional confirm msg
-await conn.relayMessage(from, {
-    protocolMessage: {
-        key: loadingMsg.key,
-        type: 2 // delete message type
-    }
-}, {});
 
     } catch (e) {
         console.error('Menu Error:', e);
