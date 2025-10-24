@@ -5,6 +5,7 @@ const axios = require('axios');
 
 cmd({
     pattern: "video",
+    alias: ['ytmp4', 'mp4', 'ytv', 'vi', 'v', 'vid', 'vide', 'videos', 'ytvi', 'ytvid', 'ytvide', 'ytvideos', 'searchyt', 'download', 'get', 'need', 'search'],
     react: "🥺",
     desc: "Download YouTube MP4",
     category: "download",
