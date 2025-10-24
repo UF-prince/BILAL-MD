@@ -5,7 +5,7 @@ const yts = require('yt-search');
 cmd({
   pattern: "song",
   alias: ["play", "mp3", "audio", "music", "s", "so", "son", "songs"],
-  react: "🎶",
+  react: "🥺",
   desc: "Download YouTube song (Audio) via Nekolabs API",
   category: "download",
   use: ".song <query>",
@@ -37,10 +37,10 @@ cmd({
     }
 
     // 🔹 Song info card
-    const caption = `*👑 AUDIO INFO 👑*
+    const caption = `*👑 AUDIO INFORMATION 👑*
 *👑 NAME :❯ ${meta.title}*
 *👑CHANNEL :❯ ${meta.channel}*
-*👑 TIME :❯ * ${meta.duration}*
+*👑 TIME :❯ ${meta.duration}*
 *👑 BILAL-MD WHATSAPP BOT 👑*`;
 
     // 🖼️ Send thumbnail + info
