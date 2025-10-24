@@ -2,10 +2,11 @@ const { cmd } = require('../command');
 const yts = require('yt-search');
 const axios = require('axios');
 
+
 cmd({
     pattern: "video",
     react: "🥺",
-    desc: "Download YouTube video (auto type select)",
+    desc: "Download YouTube MP4",
     category: "download",
     use: ".video <query>",
     filename: __filename
@@ -16,10 +17,8 @@ cmd({
         "*VIDEO ❮APKE VIDEO KA NAM❯*\n\n" +
         "*AP COMMAND ❮VIDEO❯ LIKH KAR USKE AGE APNI VIDEO KA NAME LIKH DO ☺️ FIR WO VIDEO DOWNLOAD KAR KE YAHA BHEJ DE JAYE GE 🥰💞*");
 
-        await conn.sendMessage(from, { react: { text: "😔", key: mek.key } });
-
         const search = await yts(q);
-        if (!search.videos.length) return reply("*APKI VIDEO MUJHE NAHI MILI 😔💔*");
+        if (!search.videos.length) return reply("*DUBARA KOSHISH KARO 🥺❤️*");
 
         const data = search.videos[0];
         const ytUrl = data.url;
@@ -28,45 +27,75 @@ cmd({
         const { data: apiRes } = await axios.get(api);
 
         if (!apiRes?.status || !apiRes.result?.media?.video_url) {
-            return reply("*DUBARA KOSHISH KARO ☹️*");
+            return reply("*APKI VIDEO MUJHE NAHI MILI 😔💔*");
         }
 
         const result = apiRes.result.media;
 
-        await conn.sendMessage(from, { react: { text: "☹️", key: mek.key } });
+        const caption = `
+        *__________________________________*
+*👑 VIDEO KA NAME 👑*
+*${data.title}*
+*__________________________________*
+*👑 VIDEO KA LINK 👑*
+*${data.url}*
+*__________________________________*
+*👑 VIEWS :❯  ${data.views}*
+*__________________________________*
+*👑 TIME :❯ ${data.timestamp}*
+*__________________________________*
+*PEHLE IS MSG KO MENTION KARO 🥺 AUR PHIR AGAR NUMBER ❮1❯ LIKHO GE ☺️ TO NORMAL VIDEO AYE GE 🥰 AGAR NUMBER ❮2❯ LIKHO GE 🥺 TO VIDEO FILE ME AYE GE ☺️🌹*
+*__________________________________*
+*❮1❯ SIMPLE VIDEO*
+*__________________________________*
+*❮2❯ FILE VIDEO*
+*__________________________________*
+*👑 BILAL-MD WHATSAPP BOT 👑*
+*__________________________________*`;
 
-        await conn.sendMessage(from, {
+        const sentMsg = await conn.sendMessage(from, {
             image: { url: result.thumbnail },
-            caption: `*__________________________________*\n*👑 VIDEO KA NAME 👑* \n *${title}*\n*__________________________________*\n*👑 CHANNEL :❯ ${author?.channelTitle || 'Unknown'}*\n*__________________________________*\n👑 VIEWS:❯ *${metadata?.view || '—'}*\n*__________________________________*\n*👑 LIKES :❯ ${metadata?.like || '—'}*\n*__________________________________*\n*👑 TIME:❯ ${metadata?.duration || '—'}*\n*__________________________________*`
+            caption
         }, { quoted: m });
 
-        // 🔹 Try sending as normal video first
-        try {
-            await conn.sendMessage(from, { react: { text: "😃", key: mek.key } });
-            await conn.sendMessage(from, {
-                video: { url: result.video_url },
-                mimetype: "video/mp4",
-                caption: `*👑 BY :❯ BILAL-MD 👑*`
-            }, { quoted: m });
+        const messageID = sentMsg.key.id;
 
-        } catch (sendError) {
-            console.warn("*APKI VIDEO DOWNLOAD HO RAHI HAI 🥺 THORA SA INTAZAR KARE...☺️🌹");
-            await conn.sendMessage(from, { react: { text: "📦", key: mek.key } });
+    conn.ev.on("messages.upsert", async (msgData) => {
+      const receivedMsg = msgData.messages[0];
+      if (!receivedMsg?.message) return;
 
-            // 🔹 Fallback: send as document type
-            await conn.sendMessage(from, {
-                document: { url: result.video_url },
-                mimetype: "video/mp4",
-                fileName: `${data.title}.mp4`,
-                caption: `*👑 BY :❯ BILAL-MD 👑*`
-            }, { quoted: m });
+      const receivedText = receivedMsg.message.conversation || receivedMsg.message.extendedTextMessage?.text;
+      const senderID = receivedMsg.key.remoteJid;
+      const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
+
+      if (isReplyToBot) {
+        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+
+        switch (receivedText.trim()) {
+                case "1":
+                    await conn.sendMessage(senderID, {
+                        video: { url: result.video_url },
+                        mimetype: "video/mp4",
+                        ptt: false,
+                    }, { quoted: receivedMsg });
+                    break;
+
+                case "2":
+                    await conn.sendMessage(senderID, {
+                        document: { url: result.video_url },
+                        mimetype: "video/mp4",
+                        fileName: `${data.title}.mp4`
+                    }, { quoted: receivedMsg });
+                    break;
+
+          default:
+            reply("*MERE MSG KO PEHLE MENTION KAR LO 🥺 PHIR SIRF NUMBER ME ❮1❯ YA NUMBER ❮2❯ IN DONO ME SE KOI EK NUMBER LIKHO ☺️🌹*");
         }
+      }
+    });
 
-        await conn.sendMessage(from, { react: { text: "☺️", key: mek.key } });
-
-    } catch (error) {
-        console.error("*DUBARA KOSHISH KARO 🥺❤️*", error);
-        await conn.sendMessage(from, { react: { text: "😔", key: mek.key } });
-        reply("*DUBARA KOSHISH KARO 🥺❤️*");
-    }
+  } catch (error) {
+    console.error("*APKI VIDEO NAHI MILI MUJHE 🥺*", error);
+    reply("*APKI VIDEO NAHI MILI MUJHE 🥺❤️*");
+  }
 });
