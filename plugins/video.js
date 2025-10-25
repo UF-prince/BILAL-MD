@@ -70,7 +70,7 @@ cmd({
       const isReplyToBot = receivedMsg.message.extendedTextMessage?.contextInfo?.stanzaId === messageID;
 
       if (isReplyToBot) {
-        await conn.sendMessage(senderID, { react: { text: '⏳', key: receivedMsg.key } });
+        await conn.sendMessage(senderID, { react: { text: '☺️', key: receivedMsg.key } });
 
         switch (receivedText.trim()) {
                 case "1":
